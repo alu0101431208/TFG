@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SCADA Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"/>
+    <script defer src="webScript.js"></script>                                      <!--Script de JavaScript-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>                   <!--Añadir la librería de chart.js-->
+    <script src="https://unpkg.com/chartjs-plugin-streaming"></script>              <!--Plugins chart.js-->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="/bone101/static/bonescript.js"></script>
+</head>
+<body>
+    <header id="titulo">
+        <h1>Menú visualización SCADA de nivel de tanque de agua</h1>
+    </header>
+    <nav class="main-menu">
+        <ul>
+            <li><a href="javascript:void(0);" onclick="showSelectedSection('scada')">SCADA</a></li>
+            <li><a href="javascript:void(0);" onclick="showSelectedSection('historico')">Histórico</a></li>
+            <li><a href="javascript:void(0);" onclick="showSelectedSection('pid')">Controlador PID</a></li>
+        </ul>
+    </nav>
+    <div id="scada" class="square section"> <!-- SCADA -->
+        <h2>SCADA Tanque de Agua</h2>
+        <!--
+        <p> Este sistema monitoriza en tiempo real el nivel de un tanque de agua, que es controlado por un
+            <a href="javascript:void(0);" onclick="showSelectedSection('pid')">controlador PID</a>
+        </p>
+        -->
+        <div class="container">
+            <div>
+                <img src="img/tanqueAgua.svg" class="tanqueAgua"><br>
+            </div>
+            <div>
+                <label id="mensaje">---</label>
+                <p>Nivel actual del tanque: <span id="currentLevel">---</span></p>
+                <p>Cambiar nivel del tanque: </p>
+                <div class="display">
+                    <div class="level activeLevel">Activo: <span id="activeLevel">50%</span></div>
+                    <button onclick="swapLevels()">&#x2194;</button>
+                    <div class="level standbyLevel">Standby: <input type="number" id="standbyLevel" value="50" min="0" max="100"/>%</div>
+                    <script>
+                        document.getElementById('standbyLevel').addEventListener('input', function() {
+                            let input = this;
+                            let value = parseInt(input.value, 10);
+                        
+                            // Comprobar si el valor está fuera del rango permitido
+                            if (value < 0 || value > 100) {
+                                // Corregir el valor al mínimo o máximo
+                                input.value = value < 0 ? 0 : 100;
+                                alert('El valor debe estar entre 0 y 100.');
+                            }
+                        });
+                    </script>
+                </div>
+                <br>
+                <div class="controls-container">
+                    <div>
+                        Bomba: <input type="checkbox" class="toggle" id="pumpToggle">
+                    </div>
+                    <div>
+                        SV2 (Drenaje rápido): <input type="checkbox" class="toggle" id="drainToggle">
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="waterLevelChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div id="historico" class="square section" style="display:none;"> <!-- DATOS HISTÓRICOS -->
+        <h2>Histórico</h2>
+        <p>Visualización del histórico con SQLite.</p>
+    </div>
+    <div id="pid" class="square section" style="display:none;"> <!-- CÓDIGO PID -->
+        <h2>Controlador PID</h2>
+        <p>Código fuente del controlador PID utilizado para mantener el nivel del tanque de agua</p>
+    </div>
+    <footer>
+        <div class="links">
+            <a href="https://www.ull.es/centros/escuela-superior-de-ingenieria-y-tecnologia/">
+                <img src="img\esitLogoBlanco.png"><br>
+            </a>
+            <a href="#titulo">Ir al comienzo<br></a>
+            <a href="mailto:alu0101431208@ull.edu.es">Contacto<br></a>
+        </div>
+        <div class="ident">
+            <p> Trabajo de Fin de Grado | Curso 2023 - 2024<br>
+                Andrés Alejandro Pabón Pérez<br>
+                Grado en Ingeniería Electrónica Industial y Automática<br>
+                Universidad de La Laguna
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!--
+    Quiero:
+    Añadir en cada "tarjeta" el contenido correspondiente
+    Scada: se muestra el estado de la planta en tiempo real. Debe permitir poder "variar" el nivel del tanque de agua
+    Histórico: muestra los valores de forma gráfica repartidos por día
+    Controlador PID: simplemente quiero mostrar el código fuente del PID
+-->
