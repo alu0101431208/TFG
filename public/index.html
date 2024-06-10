@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SCADA Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>               <!-- Plugins chart.js -->
+    <script src="https://unpkg.com/chartjs-plugin-streaming"></script><!-- Añadir la librería de chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script defer src="webScript.js"></script>                                      <!-- Script de JavaScript -->
+    <script src="/bone101/static/bonescript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script> <!-- Animar SVGs -->
+</head>
+<body>
+    <header id="titulo">
+        <h1>Menú visualización SCADA de nivel de tanque de agua</h1>
+    </header>
+    <nav class="main-menu">
+        <ul>
+            <li><a href="javascript:void(0);" onclick="showSelectedSection('scada')">SCADA</a></li>
+            <li><a href="javascript:void(0);" onclick="showSelectedSection('historico')">Histórico</a></li>
+        </ul>
+    </nav>
+    <div id="scada" class="square section"> <!-- SCADA -->
+        <h2>SCADA Tanque de Agua</h2>
+        <div class="container">
+            <div id="svgContainer" class="tanqueAgua"></div>
+            <div>
+                <p>Nivel actual del tanque: <span id="currentLevel">---</span></p>
+                <p>Cambiar nivel del tanque: </p>
+                <div class="display">
+                    <label for="modeSelect">Seleccionar Modo:</label>
+                    <select id="modeSelect" onchange="updateMode()">
+                        <option value="manual">Manual</option>
+                        <option value="onoff">On/Off</option>
+                        <option value="pid">PID</option>
+                    </select>
+                </div>
+                <br>
+                <div class="controls-container" id="controlsContainer">
+                    <!-- En webScript.js se añade el resto-->
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="waterLevelChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div id="historico" class="square section" style="display:none;"> <!-- DATOS HISTÓRICOS -->
+        <h2>Histórico</h2>
+        <p>Visualización de datos en el tiempo. Datos guardados utilizando SQLite</p>
+        <div class=historico-container>
+            <div class=date-inputs>
+                <label for="startDate">Fecha y hora de inicio:</label>
+                <input type="datetime-local" id="startDate">
+                <label for="endDate">Fecha y hora de fin:</label>
+                <input type="datetime-local" id="endDate">
+                <button onclick="updateHistoricalChart()">Actualizar</button>
+                <button onclick="downloadCSV()">Descargar CSV</button>
+            </div>
+            <div class="historic-chart-container">
+            <canvas id="historicalChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="links">
+            <a href="https://www.ull.es/centros/escuela-superior-de-ingenieria-y-tecnologia/">
+                <img src="img\esitLogoBlanco.png"><br>
+            </a>
+            <a href="#titulo">Ir al comienzo<br></a>
+            <a href="mailto:alu0101431208@ull.edu.es">Contacto<br></a>
+        </div>
+        <div class="ident">
+            <p> Trabajo de Fin de Grado | Curso 2023 - 2024<br>
+                Andrés Alejandro Pabón Pérez<br>
+                Grado en Ingeniería Electrónica Industial y Automática<br>
+                Universidad de La Laguna
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
